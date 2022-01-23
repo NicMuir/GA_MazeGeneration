@@ -1,8 +1,8 @@
-DEPS=MazeGeneration.cpp
+DEPS=MazeGeneration.c
 
 
 all: 
-		gcc -o Main Main.cpp $(DEPS)
+		gcc -o Main Main.c
 
 run:
 		./Main
