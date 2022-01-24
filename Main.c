@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "MazeGeneration.c"
+#include "Genetics.c"
 
 #define Number_Of_Mazes 10
 #define walls 170
@@ -10,11 +11,8 @@ int **Mazes[Number_Of_Mazes];
 
 int main(){
     for(int i=0;i<Number_Of_Mazes;i++){
-        
         Mazes[i] = Generate_Random_Maze(walls);
-        //printf("here \n");
-        Genes[i] = Create_Gene_From_Maze(Mazes[i],walls);
-        
+        Genes[i] = Create_Gene_From_Maze(Mazes[i],walls); 
     }
     //Print Mazes and wall genetics
     for(int i =0;i< Number_Of_Mazes;i++){
@@ -23,8 +21,6 @@ int main(){
         Print_Gene(Genes[i],walls);
     }
 
-    
-    
-    
+    CrossOver(Genes,walls);
     return 0;
  }

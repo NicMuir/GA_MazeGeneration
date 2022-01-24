@@ -7,11 +7,12 @@ struct Gene{
     int x,y;
 };
 
+
 int** Generate_Random_Maze(int Number_Of_Walls){
     int **Maze;
     int wall_Counter = 0;
     Maze = malloc(sizeof(int*)*size);
-
+    
     for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
         Maze[width_of_Maze] = calloc(1, sizeof(int*)*size);
     }
