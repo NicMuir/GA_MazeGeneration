@@ -9,10 +9,9 @@ struct Gene{
 
 
 int** Generate_Random_Maze(int Number_Of_Walls){
-    int **Maze;
+    int **Maze = malloc(sizeof(int*)*size);
     int wall_Counter = 0;
-    Maze = malloc(sizeof(int*)*size);
-    
+
     for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
         Maze[width_of_Maze] = calloc(1, sizeof(int*)*size);
     }
@@ -73,6 +72,19 @@ struct Gene* Create_Gene_From_Maze(int **Maze,int walls){
     
     return(Chromosome);
 }
+
+int** Create_Maze_From_Gene(struct Gene *gene, int length_of_Genes){
+    int ** Maze = malloc(sizeof(int*)*size);
+    for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
+        Maze[width_of_Maze] = calloc(1, sizeof(int*)*size);
+    }
+    for(int i =0;i<length_of_Genes;i++){
+        Maze[gene[i].x][gene[i].y] = 1;
+    }
+    return Maze;
+}
+
+
 
 void Print_Maze(int **Maze){
     for(int width = 0 ; width<size ; width++){

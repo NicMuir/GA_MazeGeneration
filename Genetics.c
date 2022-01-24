@@ -9,6 +9,30 @@
 #define Crossover_Indecies 3
 
 
+void Mutation(struct Gene * gene, int length_of_Genes){
+    int position = 0;
+    int x = 0;
+    int y = 0;
+    for(int i=0;i<MutationAmount;i++){
+        position = rand() % length_of_Genes;
+
+        x = rand() % 20;
+        y = rand() % 20;
+
+        //Guaranties new coords are not already in the gene
+        for(int k =0;k<length_of_Genes;k++){
+            if(gene[k].x == x && gene[k].y == y){
+                x = rand() % 20;
+                y = rand() % 20;
+                k=0;
+            }
+        }
+        gene[position].x = x;
+        gene[position].y = y;
+        
+    }
+}
+
 
 void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_size,int partition_index){
     struct Gene *temp = malloc((partition_size+1) * sizeof(struct Gene*));
@@ -26,10 +50,10 @@ void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_siz
 
 
 void CrossOver(struct Gene **Genes,int length_of_Genes){
-    //Make copies of genes
+    struct Gene *CrossedGenes[CrossoverLimit];
     int Partition_Lengths = floor(length_of_Genes/Crossover_Indecies);
     
-    for(int i=0;i<CrossoverLimit;i++){
+    for(int i=0;i<CrossoverLimit;i=i+2){
         struct Gene *Duplicate1 = malloc(length_of_Genes * sizeof(struct Gene*));
         struct Gene *Duplicate2 = malloc(length_of_Genes * sizeof(struct Gene*));
         memcpy(Duplicate1,Genes[0],length_of_Genes * sizeof(struct Gene*));
@@ -37,28 +61,14 @@ void CrossOver(struct Gene **Genes,int length_of_Genes){
         for(int k =0;k<Crossover_Indecies;k++){
             single_crossover(Duplicate1,Duplicate2,Partition_Lengths,Partition_Lengths*k);
         }
+        Mutation(Duplicate1,length_of_Genes);
+        Mutation(Duplicate2,length_of_Genes);
+        CrossedGenes[i] = Duplicate1;
+        CrossedGenes[i+1]=Duplicate2;
     }
-}
-
-void Mutation(struct Gene * gene, int length_of_Genes){
-    int position = 0;
-    int x = 0;
-    int y = 0;
-    for(int i=0;i<MutationAmount;i++){
-        position = rand() % length_of_Genes;
-
-        x = rand() % 20;
-        y = rand() % 20;
-        gene[position].x = x;
-        gene[position].y = y;
-        
-        }
-        
-        
-
-    }
-}
-
-void BFS(){
 
 }
+
+
+
+

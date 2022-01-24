@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "MazeGeneration.c"
 #include "Genetics.c"
+#include "FitnessFunctions.c"
 
 #define Number_Of_Mazes 10
 #define walls 170
@@ -20,7 +21,7 @@ int main(){
         printf("\n");
         Print_Gene(Genes[i],walls);
     }
-
+    
     CrossOver(Genes,walls);
     return 0;
  }
