@@ -2,25 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "Main.h"
+#include "MazeGeneration.h"
+#include "Genetics.h"
+#include "FitnessFunctions.h"
+extern int Global_Path_Finnishable;
 
 
-#define CrossoverLimit 20
-#define MutationAmount 20
-#define Crossover_Indecies 3
-
-
-void Mutation(struct Gene * gene, int length_of_Genes){
+void Mutation(struct Gene * gene){
     int position = 0;
     int x = 0;
     int y = 0;
     for(int i=0;i<MutationAmount;i++){
-        position = rand() % length_of_Genes;
+        position = rand() % walls;
 
         x = rand() % 20;
         y = rand() % 20;
 
         //Guaranties new coords are not already in the gene
-        for(int k =0;k<length_of_Genes;k++){
+        for(int k =0;k<walls;k++){
             if(gene[k].x == x && gene[k].y == y){
                 x = rand() % 20;
                 y = rand() % 20;
@@ -31,6 +31,8 @@ void Mutation(struct Gene * gene, int length_of_Genes){
         gene[position].y = y;
         
     }
+
+    int **TempMaze  = Create_Maze_From_Gene(gene);
 }
 
 
@@ -49,23 +51,30 @@ void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_siz
 }
 
 
-void CrossOver(struct Gene **Genes,int length_of_Genes){
+void CrossOver(struct Gene **Genes){
     struct Gene *CrossedGenes[CrossoverLimit];
-    int Partition_Lengths = floor(length_of_Genes/Crossover_Indecies);
+    int Partition_Lengths = floor(walls/Crossover_Indecies);
     
     for(int i=0;i<CrossoverLimit;i=i+2){
-        struct Gene *Duplicate1 = malloc(length_of_Genes * sizeof(struct Gene*));
-        struct Gene *Duplicate2 = malloc(length_of_Genes * sizeof(struct Gene*));
-        memcpy(Duplicate1,Genes[0],length_of_Genes * sizeof(struct Gene*));
-        memcpy(Duplicate2,Genes[1],length_of_Genes * sizeof(struct Gene*));
+        struct Gene *Duplicate1 = malloc(walls * sizeof(struct Gene*));
+        struct Gene *Duplicate2 = malloc(walls * sizeof(struct Gene*));
+        memcpy(Duplicate1,Genes[0],walls * sizeof(struct Gene*));
+        memcpy(Duplicate2,Genes[1],walls * sizeof(struct Gene*));
         for(int k =0;k<Crossover_Indecies;k++){
             single_crossover(Duplicate1,Duplicate2,Partition_Lengths,Partition_Lengths*k);
         }
-        Mutation(Duplicate1,length_of_Genes);
-        Mutation(Duplicate2,length_of_Genes);
+        Mutation(Duplicate1);
+        Mutation(Duplicate2);
         CrossedGenes[i] = Duplicate1;
         CrossedGenes[i+1]=Duplicate2;
     }
+
+    int ** temp = Create_Maze_From_Gene(CrossedGenes[0]);
+    Print_Maze(temp);
+    struct Stack *pth = Path(temp);
+    printf("%d \n",pth->Length);
+    printf("%d \n",Global_Path_Finnishable);
+    printf("%d,%d \n",pth->stack[pth->Length-5].x,pth->stack[pth->Length-5].y);
 
 }
 

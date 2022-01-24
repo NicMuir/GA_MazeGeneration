@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "Main.h"
+#include "MazeGeneration.h"
+#include "Genetics.h"
+#include "FitnessFunctions.h"
 
-#define size 20
  
-struct Gene{
-    int x,y;
-};
 
 
-int** Generate_Random_Maze(int Number_Of_Walls){
+int** Generate_Random_Maze(){
     int **Maze = malloc(sizeof(int*)*size);
     int wall_Counter = 0;
 
@@ -17,7 +17,7 @@ int** Generate_Random_Maze(int Number_Of_Walls){
     }
     int x = 0;
     int y = 0;
-    for(int i=0;i<Number_Of_Walls;i++){
+    for(int i=0;i<walls;i++){
         x = rand() % 20;
         y = rand() % 20;
         int loopexit = 0;
@@ -38,7 +38,7 @@ int** Generate_Random_Maze(int Number_Of_Walls){
     // for(int width = 0 ; width<size ; width++){
     //     for(int height = 0;height<size; height++){
     //         int temp = rand() % 2;
-    //         if(wall_Counter >= Number_Of_Walls && temp == 1){
+    //         if(wall_Counter >= walls && temp == 1){
     //             Maze[height][width] = 0;
     //         }else{
     //         Maze[height][width] = temp;
@@ -52,7 +52,7 @@ int** Generate_Random_Maze(int Number_Of_Walls){
     return(Maze);
 }
 
-struct Gene* Create_Gene_From_Maze(int **Maze,int walls){
+struct Gene* Create_Gene_From_Maze(int **Maze){
     
     struct Gene *Chromosome = malloc(walls * sizeof(struct Gene * ));
     for(int i =0;i<walls;i++){
@@ -73,12 +73,12 @@ struct Gene* Create_Gene_From_Maze(int **Maze,int walls){
     return(Chromosome);
 }
 
-int** Create_Maze_From_Gene(struct Gene *gene, int length_of_Genes){
+int** Create_Maze_From_Gene(struct Gene *gene){
     int ** Maze = malloc(sizeof(int*)*size);
     for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
         Maze[width_of_Maze] = calloc(1, sizeof(int*)*size);
     }
-    for(int i =0;i<length_of_Genes;i++){
+    for(int i =0;i<walls;i++){
         Maze[gene[i].x][gene[i].y] = 1;
     }
     return Maze;
@@ -95,7 +95,7 @@ void Print_Maze(int **Maze){
     }
 }
 
-void Print_Gene(struct Gene *gene,int walls){
+void Print_Gene(struct Gene *gene){
     
     for(int k = 0 ; k<walls ; k++){
         printf("%d , %d",gene[k].x , gene[k].y);

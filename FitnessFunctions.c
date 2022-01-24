@@ -1,19 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX 250
-#define size 20
+#include "Main.h"
+#include "MazeGeneration.h"
+#include "Genetics.h"
+#include "FitnessFunctions.h"
 
 
-struct Node{
-    int x,y;
-};
+int Global_Path_Finnishable = 0;
 
-struct Stack{
-    struct Node stack[MAX]; //upperbound for max size of path
-    int MaxSize;
-    int Length;
-    int back;
-};
+
 struct Stack * initStack(struct Stack *FullStack){
     FullStack->MaxSize = MAX;
     FullStack->back = 0;
@@ -33,6 +28,8 @@ struct Node Pop(struct Stack FullStack){
 }
 
 struct Stack * Path(int **Maze){
+    Global_Path_Finnishable = 0;
+
     struct Node start = {.x = 0,
                          .y = 0};
 
@@ -42,7 +39,7 @@ struct Stack * Path(int **Maze){
     
     int visited_idx = 0;
     int visited[size][size];
-    struct Stack * Path = malloc(sizeof(struct Node *));
+    struct Stack *Path = malloc(sizeof(struct Node *));
     struct Stack *FullStack = malloc(sizeof(struct Stack * ));
     initStack(FullStack);
 
@@ -57,7 +54,8 @@ struct Stack * Path(int **Maze){
         struct Node Current = Pop(*FullStack);
 
         if(Current.x == goal.x && Current.y == goal.y){
-            BackTrack_Path(Path,visited,start,goal);
+            BackTrack_Path(*Path,visited,start,goal);
+            Global_Path_Finnishable = 1;
             return Path;
         }
         //Note the values 1,2,3,4 are inverted for backtracking purposes
@@ -104,6 +102,7 @@ struct Stack * Path(int **Maze){
 
 
     }
+
     return Path;
 }
 void BackTrack_Path(struct Stack Path,int visited[size][size],struct Node Start, struct Node Goal){
@@ -135,3 +134,5 @@ void BackTrack_Path(struct Stack Path,int visited[size][size],struct Node Start,
         }
     }
 }
+
+

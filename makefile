@@ -1,8 +1,8 @@
-DEPS=MazeGeneration.c
+DEPS = MazeGeneration.c Genetics.c FitnessFunctions.c
 
 
 all: 
-		gcc -o Main Main.c
+		gcc -o Main Main.c $(DEPS)
 
 run:
 		./Main
