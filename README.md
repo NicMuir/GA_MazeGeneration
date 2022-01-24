@@ -1,2 +1,2 @@
 # GA_MazeGeneration
-Genetic Algorithm Maze generation through c++
+Genetic Algorithm Maze generation through
