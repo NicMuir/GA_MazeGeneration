@@ -7,6 +7,7 @@
 #define Number_Of_Mazes 10
 #define walls 170
 
+
 struct Gene *Genes[Number_Of_Mazes];
 int **Mazes[Number_Of_Mazes];
 
@@ -21,7 +22,7 @@ int main(){
         printf("\n");
         Print_Gene(Genes[i],walls);
     }
-    
+
     CrossOver(Genes,walls);
     return 0;
  }
