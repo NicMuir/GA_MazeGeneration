@@ -135,4 +135,6 @@ void BackTrack_Path(struct Stack Path,int visited[size][size],struct Node Start,
     }
 }
 
-
+int Fitness(){
+    //fitness calculations
+}
