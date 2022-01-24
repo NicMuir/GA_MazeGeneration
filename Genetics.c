@@ -31,8 +31,6 @@ void Mutation(struct Gene * gene){
         gene[position].y = y;
         
     }
-
-    int **TempMaze  = Create_Maze_From_Gene(gene);
 }
 
 
@@ -52,7 +50,9 @@ void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_siz
 
 
 void CrossOver(struct Gene **Genes){
+    int ** temp;
     struct Gene *CrossedGenes[CrossoverLimit];
+    double Fitneses[CrossoverLimit];
     int Partition_Lengths = floor(walls/Crossover_Indecies);
     
     for(int i=0;i<CrossoverLimit;i=i+2){
@@ -68,13 +68,36 @@ void CrossOver(struct Gene **Genes){
         CrossedGenes[i] = Duplicate1;
         CrossedGenes[i+1]=Duplicate2;
     }
+    // temp = Create_Maze_From_Gene(CrossedGenes[0]);
+    // Print_Maze(temp);
+    // printf("\n");
+    // temp = Create_Maze_From_Gene(CrossedGenes[1]);
+    // Print_Maze(temp);
 
-    int ** temp = Create_Maze_From_Gene(CrossedGenes[0]);
-    Print_Maze(temp);
-    struct Stack *pth = Path(temp);
-    printf("%d \n",pth->Length);
-    printf("%d \n",Global_Path_Finnishable);
-    printf("%d,%d \n",pth->stack[pth->Length-5].x,pth->stack[pth->Length-5].y);
+    for(int t = 0; t<CrossoverLimit-1 ;t++){
+        int ** Maze;
+        if(t==0){
+            Maze = malloc(sizeof(int*)*size);
+            for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
+                Maze[width_of_Maze] = malloc(sizeof(int*)*size);
+            }
+        }else{
+            Maze = realloc(Maze,sizeof(int*)*size); 
+        }
+
+
+        //Print_Gene(CrossedGenes[t]);
+        temp = Create_Maze_From_Gene(Maze,CrossedGenes[t]);
+        Print_Maze(temp);
+        double fit = Fitness(temp);
+        Fitneses[t]=fit;
+        
+        printf("%lf\n",Fitneses[t]);
+        
+        
+    }
+    
+    
 
 }
 

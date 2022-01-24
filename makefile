@@ -7,5 +7,8 @@ all:
 run:
 		./Main
 
+debug:
+		gcc -o Main -ggdb Main.c $(DEPS)
+
 clean:
 		$(RM) myprogram

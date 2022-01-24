@@ -16,18 +16,21 @@ struct Stack * initStack(struct Stack *FullStack){
     return FullStack;
 }
 
-void Push(struct Stack FullStack,struct Node value){
-    FullStack.back++;
-    FullStack.Length++;
-    FullStack.stack[FullStack.back] = value;
+void Push(struct Stack *FullStack,struct Node value){
+
+    FullStack->back = FullStack->back + 1;
+    FullStack->Length = FullStack->Length + 1;
+    FullStack->stack[FullStack->back] = value;
+
 }
 
-struct Node Pop(struct Stack FullStack){
-    FullStack.back--;
-    return(FullStack.stack[FullStack.back+1]);
+struct Node Pop(struct Stack *FullStack){
+    FullStack->back=FullStack->back-1;
+    FullStack->Length = FullStack->Length-1;
+    return(FullStack->stack[FullStack->back]);
 }
 
-struct Stack * Path(int **Maze){
+struct Stack * Path(int **Maze,int *visited_idx){
     Global_Path_Finnishable = 0;
 
     struct Node start = {.x = 0,
@@ -37,104 +40,119 @@ struct Stack * Path(int **Maze){
                         .y = 19};
 
     
-    int visited_idx = 0;
-    int visited[size][size];
+    int vis_idx = 0;
+    int visited[size][size] = {0};
     struct Stack *Path = malloc(sizeof(struct Node *));
     struct Stack *FullStack = malloc(sizeof(struct Stack * ));
     initStack(FullStack);
 
     //add start to visited array
-    visited_idx++;
+    
     visited[start.x][start.y] = 5; //Visited being 1 for N ; 2 for E ; 3 for S ; 4 for W ; 5 for the start
     // push start to stack
-    Push(*FullStack,start);
-    printf("%d,%d",FullStack->stack[FullStack->back-1].x,FullStack->stack[FullStack->back-1].y);
-
+    Push(FullStack,start);
+    //printf("%d,%d",FullStack->stack[FullStack->back-1].x,FullStack->stack[FullStack->back-1].y);
     while(FullStack->Length > 0){
-        struct Node Current = Pop(*FullStack);
-
+        vis_idx=vis_idx+1;
+        
+        struct Node Current = Pop(FullStack);
+        
         if(Current.x == goal.x && Current.y == goal.y){
             BackTrack_Path(*Path,visited,start,goal);
             Global_Path_Finnishable = 1;
             return Path;
         }
         //Note the values 1,2,3,4 are inverted for backtracking purposes
-
+        //printf("%d,%d,%d\n",Current.x,Current.y,Maze[Current.x][Current.y]);
         if (Current.x > 0 && Current.y < size-1 && Maze[Current.x-1][Current.y] == 0 ){ //North
             if (visited[Current.x-1][Current.y] == 0)
             {
                visited[Current.x-1][Current.y] = 3;
                struct Node temp = {Current.x-1,Current.y};
-               Push(*FullStack,temp);
+               Push(FullStack,temp);
             }
+            
             
         }
 
-        else if (Current.x > size-1 && Current.y < size-1 && Maze[Current.x+1][Current.y] == 0 ){ //South
+        if (Current.x < size-1 && Current.y < size-1 && Maze[Current.x+1][Current.y] == 0 ){ //South
             if (visited[Current.x+1][Current.y] == 0)
             {
-               visited[Current.x-1][Current.y] = 1;
+               visited[Current.x+1][Current.y] = 1;
                struct Node temp = {Current.x+1,Current.y};
-               Push(*FullStack,temp);
+               Push(FullStack,temp);  
             }
             
         }
 
-        else if (Current.x < size-1 &&  Maze[Current.x][Current.y+1] == 0 ){ //East
-            if (visited[Current.x+1][Current.y] == 0)
+        if (Current.x < size-1 &&  Maze[Current.x][Current.y+1] == 0 ){ //East
+            if (visited[Current.x][Current.y+1] == 0)
             {
-               visited[Current.x-1][Current.y] = 4;
+               visited[Current.x][Current.y+1] = 4;
                struct Node temp = {Current.x,Current.y+1};
-               Push(*FullStack,temp);
+               Push(FullStack,temp);
             }
             
         }
 
-        else if (Current.x > 0 &&  Maze[Current.x][Current.y-1] == 0 ){ //East
-            if (visited[Current.x+1][Current.y] == 0)
+        if (Current.x > 0 &&  Maze[Current.x][Current.y-1] == 0 ){ //East
+            if (visited[Current.x][Current.y-1] == 0)
             {
-               visited[Current.x-1][Current.y] = 2;
+               visited[Current.x][Current.y-1] = 2;
                struct Node temp = {Current.x,Current.y+1};
-               Push(*FullStack,temp);
+               Push(FullStack,temp);
+               
             }
+            
             
         }
 
 
     }
-
-    return Path;
+    
+    *visited_idx = vis_idx;
+    free(Path);
+    return FullStack;
 }
 void BackTrack_Path(struct Stack Path,int visited[size][size],struct Node Start, struct Node Goal){
+    printf("backtrack");
     int Current  = visited[Goal.x][Goal.y];
     struct Node Current_In_Maze = Goal;
-    Push(Path,Goal);
+    Push(&Path,Goal);
     while(Current != 5){
         if(Current ==  1){
             struct Node temp = {Current_In_Maze.x-1,Current_In_Maze.y};
-            Push(Path,temp);
+            Push(&Path,temp);
             Current = visited[temp.x][temp.y];
             Current_In_Maze = temp;
         }else if(Current==2){
             struct Node temp = {Current_In_Maze.x,Current_In_Maze.y+1};
-            Push(Path,temp);
+            Push(&Path,temp);
             Current = visited[temp.x][temp.y];
             Current_In_Maze = temp;
         }else if(Current==3){
             struct Node temp = {Current_In_Maze.x+1,Current_In_Maze.y};
-            Push(Path,temp);
+            Push(&Path,temp);
             Current = visited[temp.x][temp.y];
             Current_In_Maze = temp;
 
         }else if(Current==4){
             struct Node temp = {Current_In_Maze.x,Current_In_Maze.y-1};
-            Push(Path,temp);
+            Push(&Path,temp);
             Current = visited[temp.x][temp.y];
             Current_In_Maze = temp;
         }
     }
 }
 
-int Fitness(){
+double Fitness(int **Maze){
     //fitness calculations
+    int visited_idx = 0 ;
+    struct Stack *pth = Path(Maze,&visited_idx);
+    free(pth);
+    if(Global_Path_Finnishable == 0){
+        return((double)visited_idx/(double)walls);
+    }else{
+        return 1;
+    }
 }

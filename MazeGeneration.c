@@ -73,11 +73,8 @@ struct Gene* Create_Gene_From_Maze(int **Maze){
     return(Chromosome);
 }
 
-int** Create_Maze_From_Gene(struct Gene *gene){
-    int ** Maze = malloc(sizeof(int*)*size);
-    for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
-        Maze[width_of_Maze] = calloc(1, sizeof(int*)*size);
-    }
+int** Create_Maze_From_Gene(int ** Maze,struct Gene *gene){
+    
     for(int i =0;i<walls;i++){
         Maze[gene[i].x][gene[i].y] = 1;
     }
