@@ -15,7 +15,7 @@ void Mutation(struct Gene * gene){
     int y = 0;
     for(int i=0;i<MutationAmount;i++){
         position = rand() % walls;
-
+       
         x = rand() % 20;
         y = rand() % 20;
 
@@ -24,75 +24,114 @@ void Mutation(struct Gene * gene){
             if(gene[k].x == x && gene[k].y == y){
                 x = rand() % 20;
                 y = rand() % 20;
-                k=0;
+                
             }
         }
         gene[position].x = x;
         gene[position].y = y;
+
+        
         
     }
 }
 
 
 void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_size,int partition_index){
+
     struct Gene *temp = malloc((partition_size+1) * sizeof(struct Gene*));
     //coppy to temp array 
     for(int i = 0;i<partition_size;i++){
-        temp[i] = gene1[partition_index+i];
-    }
-    for(int i = 0;i<partition_size;i++){
-        gene1[partition_index+i] = gene2[partition_index+i];
-        gene2[partition_index+i] = temp[i];
-    } 
+        temp[i].x = gene1[partition_index+i].x;
+        temp[i].y = gene1[partition_index+i].y;
 
+        gene1[partition_index+i].x = gene2[partition_index+i].x;
+        gene1[partition_index+i].y = gene2[partition_index+i].y;
+
+
+        gene2[partition_index+i].x = temp[i].x;
+        gene2[partition_index+i].y = temp[i].y;
+    } 
+    
     free(temp);
 }
 
 
-void CrossOver(struct Gene **Genes){
+void CrossOver(struct GeneArray *Genes){
+    
+    int rnd1,rnd2;
     int ** temp;
-    struct Gene *CrossedGenes[CrossoverLimit];
+    int idx_counter = 0;
+
+    struct GeneArray *CrossedGenes = malloc(CrossoverLimit * sizeof(struct GeneArray));
+    for(int k =0;k<CrossoverLimit;k++){
+        CrossedGenes[k].back = 0;
+    }
+
     double Fitneses[CrossoverLimit];
     int Partition_Lengths = floor(walls/Crossover_Indecies);
+
     
-    for(int i=0;i<CrossoverLimit;i=i+2){
-        struct Gene *Duplicate1 = malloc(walls * sizeof(struct Gene*));
-        struct Gene *Duplicate2 = malloc(walls * sizeof(struct Gene*));
-        memcpy(Duplicate1,Genes[0],walls * sizeof(struct Gene*));
-        memcpy(Duplicate2,Genes[1],walls * sizeof(struct Gene*));
+
+    for(int i=0;i<CrossoverLimit;i++){
+
+        
+
+        struct Gene *Duplicate1 = malloc(walls * sizeof(struct Gene));
+        struct Gene *Duplicate2 = malloc(walls * sizeof(struct Gene));
+
+        rnd1 = rand() % Number_Of_Mazes;
+        rnd2 = rand() % Number_Of_Mazes;
+
+        for(int j=0;j<walls;j++){
+            Duplicate1[j] = *Genes[rnd1].Array[j];
+            Duplicate2[j] = *Genes[rnd2].Array[j];
+        }
+        printf("///////////////////////////////////\n");
+        Print_Gene_Malloc(Duplicate1);
+        printf("///////////////////////////////////\n");
+
+        // memcpy(Duplicate1,Genes[rnd1],sizeof(struct Gene*));
+        // memcpy(Duplicate2,Genes[rnd2],sizeof(struct Gene*));
+
         for(int k =0;k<Crossover_Indecies;k++){
             single_crossover(Duplicate1,Duplicate2,Partition_Lengths,Partition_Lengths*k);
         }
+
         Mutation(Duplicate1);
         Mutation(Duplicate2);
-        CrossedGenes[i] = Duplicate1;
-        CrossedGenes[i+1]=Duplicate2;
-    }
-    // temp = Create_Maze_From_Gene(CrossedGenes[0]);
-    // Print_Maze(temp);
-    // printf("\n");
-    // temp = Create_Maze_From_Gene(CrossedGenes[1]);
-    // Print_Maze(temp);
-
-    for(int t = 0; t<CrossoverLimit-1 ;t++){
-        int ** Maze;
-        if(t==0){
-            Maze = malloc(sizeof(int*)*size);
-            for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
-                Maze[width_of_Maze] = malloc(sizeof(int*)*size);
-            }
-        }else{
-            Maze = realloc(Maze,sizeof(int*)*size); 
-        }
-
-
-        //Print_Gene(CrossedGenes[t]);
-        temp = Create_Maze_From_Gene(Maze,CrossedGenes[t]);
-        Print_Maze(temp);
-        double fit = Fitness(temp);
-        Fitneses[t]=fit;
         
+        
+
+        PushGeneArray(CrossedGenes,Duplicate1);
+        //Print_Gene_Malloc(Duplicate1);
+        PushGeneArray(CrossedGenes,Duplicate2);  
+
+        
+    }
+    for(int i=0;i<CrossedGenes[0].back;i++){
+        printf("%d,%d\n",CrossedGenes[0].Array[i]->x,CrossedGenes[0].Array[i]->y);
+    }
+
+    printf("///////////////////////////// bruh\n");
+    for(int t = 0; t<CrossoverLimit;t++){
+
+        int ** Maze = malloc(size* sizeof(int*));
+        for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
+            Maze[width_of_Maze] = malloc(size*sizeof(int*));
+        }
+        
+        Create_Maze_From_Gene(Maze,&CrossedGenes[t]);
+        Print_Maze(Maze);
+        double fit = Fitness(Maze);
+        Fitneses[t]=fit;
         printf("%lf\n",Fitneses[t]);
+        
+
+
+        for (int i=0; i<size; i++) {
+            free(Maze[i]);
+        }
+        free(Maze);
         
         
     }

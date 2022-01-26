@@ -22,8 +22,8 @@ int** Generate_Random_Maze(){
         y = rand() % 20;
         int loopexit = 0;
         while(loopexit == 0){
-            if(Maze[y][x] == 0){
-                Maze[y][x] = 1;
+            if(Maze[x][y] == 0){
+                Maze[x][y] = 1;
                 loopexit = 1;
             }else{
                 x = rand() % 20;
@@ -52,19 +52,18 @@ int** Generate_Random_Maze(){
     return(Maze);
 }
 
-struct Gene* Create_Gene_From_Maze(int **Maze){
+struct GeneArray* Create_Gene_From_Maze(int **Maze){
     
-    struct Gene *Chromosome = malloc(walls * sizeof(struct Gene * ));
-    for(int i =0;i<walls;i++){
-        Chromosome[i].x = malloc(sizeof(int));
-        Chromosome[i].y = malloc(sizeof(int));
-    }
+    struct GeneArray *Chromosome = malloc(sizeof(struct GeneArray ));
+    struct Gene  *savegene;
     int GeneCounter = 0;
     for(int width = 0 ; width<size ;width++){
         for(int height = 0;height<size;height++){
             if(Maze[height][width] == 1){
-                Chromosome[GeneCounter].x = width;
-                Chromosome[GeneCounter].y = height;
+                savegene = malloc(sizeof(struct Gene *));
+                savegene->x = width;
+                savegene->y = height;
+                Chromosome->Array[GeneCounter] = savegene;
                 GeneCounter++;
                 }
             }
@@ -73,29 +72,54 @@ struct Gene* Create_Gene_From_Maze(int **Maze){
     return(Chromosome);
 }
 
-int** Create_Maze_From_Gene(int ** Maze,struct Gene *gene){
-    
-    for(int i =0;i<walls;i++){
-        Maze[gene[i].x][gene[i].y] = 1;
+void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes){
+    //printf("%d\n",gene->Array->x);
+    for(int i =0;i<CrossedGenes->back;i++){
+       Maze[CrossedGenes->Array[i]->x][CrossedGenes->Array[i]->y] = 1;
     }
-    return Maze;
+    
 }
+
 
 
 
 void Print_Maze(int **Maze){
     for(int width = 0 ; width<size ; width++){
         for(int height = 0;height<size;height++){
-            printf("%d",Maze[width][height]);
+            printf("%d",Maze[height][width]);
         }
         printf("\n");
     }
 }
 
-void Print_Gene(struct Gene *gene){
-    
+void Print_Gene(struct Gene *gene[walls]){
+    for(int k = 0 ; k<walls ; k++){
+        printf("%d , %d",gene[k]->x , gene[k]->y);
+        printf("\n");
+    }
+}
+
+void Print_Gene_Malloc(struct Gene *gene){
     for(int k = 0 ; k<walls ; k++){
         printf("%d , %d",gene[k].x , gene[k].y);
         printf("\n");
     }
+}
+
+void Print_Gene_Array(struct GeneArray *CrossedGenes){
+    for(int k = 0 ; k<walls ; k++){
+        
+        printf("%d , %d",CrossedGenes->Array[k]->x , CrossedGenes->Array[k]->y );
+        printf("\n");
+    }
+}
+
+
+
+
+void PushGeneArray(struct GeneArray *Array, struct Gene *value){
+
+    Array->Array[Array->back] = value;
+    ++Array->back;
+
 }

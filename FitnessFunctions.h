@@ -17,8 +17,8 @@ struct Stack{
 struct Stack * initStack(struct Stack *FullStack);
 void Push(struct Stack *FullStack, struct Node value);
 struct Node Pop(struct Stack *FullStack);
-struct Stack * Path(int **Maze,int *visited_idx);
-void BackTrack_Path(struct Stack Path,int visited[size][size],struct Node Start,struct Node Goal);
+void Path(int **Maze,int *visited_idx);
+void BackTrack_Path(int visited[size][size],struct Node Start,struct Node Goal);
 double Fitness(int **Maze);
 
 

@@ -11,4 +11,4 @@ debug:
 		gcc -o Main -ggdb Main.c $(DEPS)
 
 clean:
-		$(RM) myprogram
+		$(RM) Main
