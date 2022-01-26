@@ -72,10 +72,10 @@ struct GeneArray* Create_Gene_From_Maze(int **Maze){
     return(Chromosome);
 }
 
-void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes){
+void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes,int index){
     //printf("%d\n",gene->Array->x);
     for(int i =0;i<CrossedGenes->back;i++){
-       Maze[CrossedGenes->Array[i]->x][CrossedGenes->Array[i]->y] = 1;
+       Maze[CrossedGenes->Array[index][i].x][CrossedGenes->Array[index][i].y] = 1;
     }
     
 }

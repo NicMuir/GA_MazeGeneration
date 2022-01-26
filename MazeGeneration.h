@@ -16,7 +16,7 @@ struct GeneArray{
 int** Generate_Random_Maze();
 struct GeneArray* Create_Gene_From_Maze(int **Maze);
 // void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes);
-void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes);
+void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes,int index);
 void Print_Maze(int **Maze);
 void Print_Gene(struct Gene *gene[walls]);
 void Print_Gene_Malloc(struct Gene *gene);
