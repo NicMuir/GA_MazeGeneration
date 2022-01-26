@@ -9,5 +9,6 @@
 #define Crossover_Indecies 3
 #define MAX 250             //StackSize
 
+void sortFitnessArray(double Fitneses[CrossoverLimit]);
 
 #endif

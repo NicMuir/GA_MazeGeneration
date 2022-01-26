@@ -56,25 +56,20 @@ void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_siz
 }
 
 
-void CrossOver(struct GeneArray *Genes){
+ struct GeneArray * CrossOver(struct GeneArray *Genes){
     
     int rnd1,rnd2;
     int ** temp;
     int idx_counter = 0;
 
     struct GeneArray *CrossedGenes = malloc(CrossoverLimit * sizeof(struct GeneArray));
-    // for(int k =0;k<CrossoverLimit;k++){
-    //     CrossedGenes[k].back = 0;
-    // }
-
-    double Fitneses[CrossoverLimit];
+    
+    
     int Partition_Lengths = floor(walls/Crossover_Indecies);
 
     
-
+    //Loop for generating child Genes via crossover method
     for(int i=0;i<CrossoverLimit;i++){
-
-        
 
         struct Gene *Duplicate1 = malloc(walls * sizeof(struct Gene));
         struct Gene *Duplicate2 = malloc(walls * sizeof(struct Gene));
@@ -86,13 +81,7 @@ void CrossOver(struct GeneArray *Genes){
             Duplicate1[j] = *Genes[rnd1].Array[j];
             Duplicate2[j] = *Genes[rnd2].Array[j];
         }
-        printf("///////////////////////////////////\n");
-        Print_Gene_Malloc(Duplicate1);
-        printf("///////////////////////////////////\n");
-
-        // memcpy(Duplicate1,Genes[rnd1],sizeof(struct Gene*));
-        // memcpy(Duplicate2,Genes[rnd2],sizeof(struct Gene*));
-
+    
         for(int k =0;k<Crossover_Indecies;k++){
             single_crossover(Duplicate1,Duplicate2,Partition_Lengths,Partition_Lengths*k);
         }
@@ -100,51 +89,14 @@ void CrossOver(struct GeneArray *Genes){
         Mutation(Duplicate1);
         Mutation(Duplicate2);
         
-        
-
+    
         PushGeneArray(CrossedGenes,Duplicate1);
-        //Print_Gene_Malloc(Duplicate1);
         PushGeneArray(CrossedGenes,Duplicate2);  
         
         
     }
-    // for(int m=0;m<CrossoverLimit;m++){
-    //     for(int n=0;n<walls;n++){
-    //         printf("%d,%d\n",CrossedGenes->Array[m][n].x,CrossedGenes->Array[m][n].y);
-    //     }
-    //     printf("########################################\n");
-        
-    // }
-
-    int ** Maze = malloc(size* sizeof(int*));
-        for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
-            Maze[width_of_Maze] = malloc(size*sizeof(int*));
-        }
-
-    printf("///////////////////////////// bruh\n");
-    for(int t = 0; t<CrossoverLimit;t++){
-        
-
-        for(int width = 0 ; width<size ; width++){
-            for(int height = 0;height<size;height++){
-                Maze[height][width] = 0;
-            }
-        }
-        
-        
-        Create_Maze_From_Gene(Maze,CrossedGenes,t);
-
-        Print_Maze(Maze);
-
-        
-        double fit = Fitness(Maze);
-        Fitneses[t]=fit;
-        printf("%lf\n",Fitneses[t]);
-        
-        
-       
-        
-    }
+    
+    return CrossedGenes;
     
     
 

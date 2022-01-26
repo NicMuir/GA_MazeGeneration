@@ -107,10 +107,13 @@ void Print_Gene_Malloc(struct Gene *gene){
 }
 
 void Print_Gene_Array(struct GeneArray *CrossedGenes){
-    for(int k = 0 ; k<walls ; k++){
+    //Currently all the genes
+    for(int m=0;m<CrossoverLimit;m++){
+        for(int n=0;n<walls;n++){
+            printf("%d,%d\n",CrossedGenes->Array[m][n].x,CrossedGenes->Array[m][n].y);
+        }
+        printf("########################################\n");
         
-        printf("%d , %d",CrossedGenes->Array[k]->x , CrossedGenes->Array[k]->y );
-        printf("\n");
     }
 }
 

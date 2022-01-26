@@ -11,14 +11,12 @@ int Global_Created_Check = 0;
 
 
 struct Stack * initStack(struct Stack *FullStack){
-    FullStack->MaxSize = MAX;
     FullStack->back = 0;
     FullStack->Length = 0;
     return FullStack;
 }
 
 void Push(struct Stack *FullStack,struct Node value){
-
     FullStack->back = FullStack->back + 1;
     FullStack->Length = FullStack->Length + 1;
     FullStack->stack[FullStack->back] = value;
@@ -46,7 +44,7 @@ void Path(int **Maze,int *visited_idx){
 
 
     
-    struct Stack *FullStack =malloc(sizeof(struct Stack*)) ;
+    struct Stack *FullStack = malloc(sizeof(struct Stack )) ;
     
 
     initStack(FullStack);
@@ -74,7 +72,7 @@ void Path(int **Maze,int *visited_idx){
 
 
 
-        if (Current.x > 0  && Maze[Current.x-1][Current.y] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x-1][Current.y] == 0 ){ 
             if (visited[Current.x-1][Current.y] == 0)
             {
                visited[Current.x][Current.y] = 3;
@@ -85,7 +83,7 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
-        if (Current.x < size-1 && Maze[Current.x+1][Current.y] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x+1][Current.y] == 0 ){ 
             if (visited[Current.x+1][Current.y] == 0)
             {
                visited[Current.x][Current.y] = 1;
@@ -95,7 +93,7 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
-        if (Current.y < size-1 && Maze[Current.x][Current.y+1] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x][Current.y+1] == 0 ){ 
             if (visited[Current.x][Current.y+1] == 0)
             {
                visited[Current.x][Current.y] = 4;
@@ -105,7 +103,7 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
-        if ( Current.y > 0 && Maze[Current.x][Current.y-1] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x][Current.y-1] == 0 ){ 
             if (visited[Current.x][Current.y-1] == 0)
             {
                visited[Current.x][Current.y] = 2;
@@ -126,9 +124,6 @@ void Path(int **Maze,int *visited_idx){
     Global_Created_Check++;
     *visited_idx = vis_idx;
     
-    //free(path);
-
-    // free(FullStack->stack);
     free(FullStack);
     return;
 }
@@ -137,7 +132,7 @@ void Path(int **Maze,int *visited_idx){
 
 void BackTrack_Path(int visited[][size],struct Node Start, struct Node Goal){
     printf("backtrack");
-    struct Stack * path = malloc(sizeof(struct Stack *));
+    struct Stack * path = malloc(sizeof(struct Stack ));
 
     int Current  = visited[Goal.x][Goal.y];
     struct Node Current_In_Maze = Goal;
