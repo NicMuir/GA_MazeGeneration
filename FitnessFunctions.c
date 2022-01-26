@@ -28,7 +28,7 @@ void Push(struct Stack *FullStack,struct Node value){
 struct Node Pop(struct Stack *FullStack){
     FullStack->back=FullStack->back-1;
     FullStack->Length = FullStack->Length-1;
-    return(FullStack->stack[FullStack->back]);
+    return(FullStack->stack[FullStack->back+1]);
 }
 
 void Path(int **Maze,int *visited_idx){
@@ -53,7 +53,7 @@ void Path(int **Maze,int *visited_idx){
 
     //add start to visited array
     
-    visited[start.x][start.y] = 5; //Visited being 1 for N ; 2 for E ; 3 for S ; 4 for W ; 5 for the start
+    visited[start.x][start.y] = 5; 
     // push start to stack
     Push(FullStack,start);
 
@@ -61,17 +61,23 @@ void Path(int **Maze,int *visited_idx){
         vis_idx=vis_idx+1;
         
         struct Node Current = Pop(FullStack);
-        
+
         if(Current.x == goal.x && Current.y == goal.y){
-            BackTrack_Path(visited,start,goal);
+            printf("Finishable\n");
+            free(FullStack);
+            //BackTrack_Path(visited,start,goal); // Takes a while to backtrack path to display Not Working ATM
             Global_Path_Finnishable = 1;
             return ;
         }
         //Note the values 1,2,3,4 are inverted for backtracking purposes
-        if (Current.x > 0 && Current.y < size-1 && Maze[Current.x-1][Current.y] == 0 ){ //North
+        
+
+
+
+        if (Current.x > 0  && Maze[Current.x-1][Current.y] == 0 ){ 
             if (visited[Current.x-1][Current.y] == 0)
             {
-               visited[Current.x-1][Current.y] = 3;
+               visited[Current.x][Current.y] = 3;
                struct Node temp = {Current.x-1,Current.y};
                Push(FullStack,temp);
             }
@@ -79,31 +85,31 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
-        if (Current.x < size-1 && Current.y < size-1 && Maze[Current.x+1][Current.y] == 0 ){ //South
+        if (Current.x < size-1 && Maze[Current.x+1][Current.y] == 0 ){ 
             if (visited[Current.x+1][Current.y] == 0)
             {
-               visited[Current.x+1][Current.y] = 1;
+               visited[Current.x][Current.y] = 1;
                struct Node temp = {Current.x+1,Current.y};
                Push(FullStack,temp);  
             }
             
         }
 
-        if (Current.x < size-1 &&  Maze[Current.x][Current.y+1] == 0 ){ //East
+        if (Current.y < size-1 && Maze[Current.x][Current.y+1] == 0 ){ 
             if (visited[Current.x][Current.y+1] == 0)
             {
-               visited[Current.x][Current.y+1] = 4;
+               visited[Current.x][Current.y] = 4;
                struct Node temp = {Current.x,Current.y+1};
                Push(FullStack,temp);
             }
             
         }
 
-        if (Current.x > 0 &&  Maze[Current.x][Current.y-1] == 0 ){ //East
+        if ( Current.y > 0 && Maze[Current.x][Current.y-1] == 0 ){ 
             if (visited[Current.x][Current.y-1] == 0)
             {
-               visited[Current.x][Current.y-1] = 2;
-               struct Node temp = {Current.x,Current.y+1};
+               visited[Current.x][Current.y] = 2;
+               struct Node temp = {Current.x,Current.y-1};
                Push(FullStack,temp);
                
             }
@@ -111,8 +117,12 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
+        
+
 
     }
+    printf("\n");
+    printf("NOT Finishable\n");
     Global_Created_Check++;
     *visited_idx = vis_idx;
     
@@ -122,9 +132,12 @@ void Path(int **Maze,int *visited_idx){
     free(FullStack);
     return;
 }
-void BackTrack_Path(int visited[size][size],struct Node Start, struct Node Goal){
+
+//Not Currently working
+
+void BackTrack_Path(int visited[][size],struct Node Start, struct Node Goal){
     printf("backtrack");
-    struct Stack *path = malloc(sizeof(struct Stack *));
+    struct Stack * path = malloc(sizeof(struct Stack *));
 
     int Current  = visited[Goal.x][Goal.y];
     struct Node Current_In_Maze = Goal;

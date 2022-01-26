@@ -73,8 +73,8 @@ struct GeneArray* Create_Gene_From_Maze(int **Maze){
 }
 
 void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes,int index){
-    //printf("%d\n",gene->Array->x);
-    for(int i =0;i<CrossedGenes->back;i++){
+    
+    for(int i =0;i<walls;i++){
        Maze[CrossedGenes->Array[index][i].x][CrossedGenes->Array[index][i].y] = 1;
     }
     
@@ -86,7 +86,7 @@ void Create_Maze_From_Gene(int ** Maze,struct GeneArray *CrossedGenes,int index)
 void Print_Maze(int **Maze){
     for(int width = 0 ; width<size ; width++){
         for(int height = 0;height<size;height++){
-            printf("%d",Maze[height][width]);
+            printf("%d",Maze[width][height]);
         }
         printf("\n");
     }
