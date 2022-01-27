@@ -71,10 +71,6 @@ void Path(int **Maze,int *visited_idx){
             return ;
         }
         //Note the values 1,2,3,4 are inverted for backtracking purposes
-        
-
-
-
         if (Current.x < size-1 && Current.y < size-1 && Current.y > -1 && Current.x > 0 && Maze[Current.x-1][Current.y] == 0 ){ 
             if (visited[Current.x-1][Current.y] == 0)
             {
@@ -132,7 +128,6 @@ void Path(int **Maze,int *visited_idx){
 }
 
 //Not Currently working
-
 void BackTrack_Path(int visited[][size],struct Node Start, struct Node Goal){
     printf("backtrack");
     struct Stack * path = malloc(sizeof(struct Stack ));
