@@ -66,14 +66,9 @@ void Path(int **Maze,int *visited_idx){
         if(Current.x == goal.x && Current.y == goal.y){
             printf("Finishable\n");
             free(FullStack);
-            //BackTrack_Path(visited,start,goal); // Takes a while to backtrack path to display Not Working ATM
             Global_Path_Finnishable = 1;
             return ;
         }
-        //Note the values 1,2,3,4 are inverted for backtracking purposes
-        
-
-
 
         if (Current.x < size-1 && Current.y < size-1 && Current.y > -1 && Current.x > 0 && Maze[Current.x-1][Current.y] == 0 ){ 
             if (visited[Current.x-1][Current.y] == 0)
@@ -120,7 +115,6 @@ void Path(int **Maze,int *visited_idx){
 
         
 
-
     }
     printf("\n");
     printf("NOT Finishable\n");
@@ -131,41 +125,6 @@ void Path(int **Maze,int *visited_idx){
     return;
 }
 
-//Not Currently working
-
-void BackTrack_Path(int visited[][size],struct Node Start, struct Node Goal){
-    printf("backtrack");
-    struct Stack * path = malloc(sizeof(struct Stack ));
-
-    int Current  = visited[Goal.x][Goal.y];
-    struct Node Current_In_Maze = Goal;
-
-    Push(path,Goal);
-    while(Current != 5){
-        if(Current ==  1){
-            struct Node temp = {Current_In_Maze.x-1,Current_In_Maze.y};
-            Push(path,temp);
-            Current = visited[temp.x][temp.y];
-            Current_In_Maze = temp;
-        }else if(Current==2){
-            struct Node temp = {Current_In_Maze.x,Current_In_Maze.y+1};
-            Push(path,temp);
-            Current = visited[temp.x][temp.y];
-            Current_In_Maze = temp;
-        }else if(Current==3){
-            struct Node temp = {Current_In_Maze.x+1,Current_In_Maze.y};
-            Push(path,temp);
-            Current = visited[temp.x][temp.y];
-            Current_In_Maze = temp;
-
-        }else if(Current==4){
-            struct Node temp = {Current_In_Maze.x,Current_In_Maze.y-1};
-            Push(path,temp);
-            Current = visited[temp.x][temp.y];
-            Current_In_Maze = temp;
-        }
-    }
-}
 
 double Fitness(int **Maze){
     //fitness calculations
