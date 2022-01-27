@@ -7,7 +7,8 @@ struct Node{
 };
 
 struct Stack{
-    struct Node stack[MAX]; //upperbound for max size of path
+    struct Node stack[1000]; //upperbound for max size of path
+    int Front;
     int Length;
     int back;
 };

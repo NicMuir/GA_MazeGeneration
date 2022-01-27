@@ -54,9 +54,11 @@ int main(){
         Print_Maze(Maze);
         double fit = Fitness(Maze);
         Fitneses[t]=fit;
-        printf("%lf\n",Fitneses[t]);
+        // printf("%lf\n",Fitneses[t]);
           
     }
+
+    sortFitnessArray(Fitneses);
     return 0;
  }
 
@@ -72,8 +74,8 @@ void sortFitnessArray(double Fits[]){
         }
     }
 
-    // for (int i = 0; i < CrossoverLimit; ++i){
-    //     printf("%f\n", Fits[i]);
-    // }
+    for (int i = 0; i < CrossoverLimit; ++i){
+        printf("%f\n", Fits[i]);
+    }
 }
 

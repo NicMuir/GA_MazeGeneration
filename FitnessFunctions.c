@@ -11,8 +11,9 @@ int Global_Created_Check = 0;
 
 
 struct Stack * initStack(struct Stack *FullStack){
+    FullStack->Front = 0;
     FullStack->back = 0;
-    FullStack->Length = 0;
+    FullStack->Length = 1;
     return FullStack;
 }
 
@@ -24,9 +25,11 @@ void Push(struct Stack *FullStack,struct Node value){
 }
 
 struct Node Pop(struct Stack *FullStack){
-    FullStack->back=FullStack->back-1;
+    struct Node temp = FullStack->stack[FullStack->Front];
+    FullStack->Front = FullStack->Front+1;
+    //FullStack->back = FullStack->back-1;
     FullStack->Length = FullStack->Length-1;
-    return(FullStack->stack[FullStack->back+1]);
+    return(temp);
 }
 
 void Path(int **Maze,int *visited_idx){
@@ -72,10 +75,10 @@ void Path(int **Maze,int *visited_idx){
 
 
 
-        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x-1][Current.y] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > -1 && Current.x > 0 && Maze[Current.x-1][Current.y] == 0 ){ 
             if (visited[Current.x-1][Current.y] == 0)
             {
-               visited[Current.x][Current.y] = 3;
+               visited[Current.x-1][Current.y] = 3;
                struct Node temp = {Current.x-1,Current.y};
                Push(FullStack,temp);
             }
@@ -83,30 +86,30 @@ void Path(int **Maze,int *visited_idx){
             
         }
 
-        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x+1][Current.y] == 0 ){ 
+        if (Current.x < size-1 && Current.y > -1 && Current.x > -1 && Maze[Current.x+1][Current.y] == 0 ){ 
             if (visited[Current.x+1][Current.y] == 0)
             {
-               visited[Current.x][Current.y] = 1;
+               visited[Current.x+1][Current.y] = 1;
                struct Node temp = {Current.x+1,Current.y};
                Push(FullStack,temp);  
             }
             
         }
 
-        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x][Current.y+1] == 0 ){ 
+        if (Current.y < size-1 && Current.y > -1 && Current.x > -1 && Maze[Current.x][Current.y+1] == 0 ){ 
             if (visited[Current.x][Current.y+1] == 0)
             {
-               visited[Current.x][Current.y] = 4;
+               visited[Current.x][Current.y+1] = 4;
                struct Node temp = {Current.x,Current.y+1};
                Push(FullStack,temp);
             }
             
         }
 
-        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > 0 && Maze[Current.x][Current.y-1] == 0 ){ 
+        if (Current.x < size-1 && Current.y < size-1 && Current.y > 0 && Current.x > -1 && Maze[Current.x][Current.y-1] == 0 ){ 
             if (visited[Current.x][Current.y-1] == 0)
             {
-               visited[Current.x][Current.y] = 2;
+               visited[Current.x][Current.y-1] = 2;
                struct Node temp = {Current.x,Current.y-1};
                Push(FullStack,temp);
                
@@ -168,7 +171,7 @@ double Fitness(int **Maze){
     //fitness calculations
     int visited_idx = 0 ;
     Path(Maze,&visited_idx);
-    
+    Print_Maze(Maze);
     if(Global_Path_Finnishable == 0){
         return((double)visited_idx/(double)walls);
     }else{

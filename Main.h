@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #define size 20
-#define walls 200           //Number of walls -> Length of a gene
+#define walls 100           //Number of walls -> Length of a gene
 #define Number_Of_Mazes 10
 #define CrossoverLimit 20
 #define MutationAmount 20
