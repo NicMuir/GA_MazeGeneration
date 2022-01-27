@@ -154,10 +154,6 @@ void sortFitnessArray(double Fits[]){
             }
         }
     }
-
-    for (int i = 0; i < CrossoverLimit; ++i){
-        printf("%f\n", Fits[i]);
-    }
 }
 
 void InsertFitness(double BestFits[CrossoverLimit] , double NewFits[CrossoverLimit],struct GeneArray *OrigGenes, struct GeneArray *CrossedGenes){

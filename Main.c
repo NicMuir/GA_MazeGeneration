@@ -35,30 +35,38 @@ int main(){
     double Fitneses[CrossoverLimit];
     
 
-
+    //Maze for display purpouses
     int ** Maze = malloc(size* sizeof(int*));
     for(int width_of_Maze=0;width_of_Maze<size;width_of_Maze++){
         Maze[width_of_Maze] = malloc(size*sizeof(int*));
     }
-    for(int t = 0; t<CrossoverLimit;t++){
-        
 
-        for(int width = 0 ; width<size ; width++){
-            for(int height = 0;height<size;height++){
-                Maze[height][width] = 0;
+    for(int MainCrossLoop=0;MainCrossLoop<10;MainCrossLoop++){
+        for(int t = 0; t<CrossoverLimit;t++){
+            
+
+            for(int width = 0 ; width<size ; width++){
+                for(int height = 0;height<size;height++){
+                    Maze[height][width] = 0;
+                }
             }
+            
+            
+            Create_Maze_From_Gene(Maze,CrossedGenes,t);
+            //Print_Maze(Maze);
+            
+            Fitneses[t]=Fitness(Maze);
+
+
+            
         }
-        
-        
-        Create_Maze_From_Gene(Maze,CrossedGenes,t);
-        //Print_Maze(Maze);
-        
-        Fitneses[t]=Fitness(Maze);
-        // printf("%lf\n",Fitneses[t]);
-          
+        InsertFitness(OriginalFitnesses , Fitneses ,Genes, CrossedGenes);
     }
 
-    sortFitnessArray(Fitneses);
+    for (int i = 0; i < CrossoverLimit; ++i){
+        printf("%f\n", OriginalFitnesses[i]);
+    }
+    
     return 0;
  }
 
