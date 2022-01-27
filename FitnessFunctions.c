@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Main.h"
 #include "MazeGeneration.h"
 #include "Genetics.h"
@@ -129,11 +130,45 @@ void Path(int **Maze,int *visited_idx){
 double Fitness(int **Maze){
     //fitness calculations
     int visited_idx = 0 ;
+    Global_Path_Finnishable = 0;
     Path(Maze,&visited_idx);
     Print_Maze(Maze);
+    
     if(Global_Path_Finnishable == 0){
-        return((double)visited_idx/(double)walls);
+        return((double)(visited_idx)/(double)(size*size));
     }else{
         return 1;
+    }
+}
+
+
+
+void sortFitnessArray(double Fits[]){
+     double temp;
+    for (int i = 0; i < CrossoverLimit; ++i){
+        for (int j = i + 1; j < CrossoverLimit; ++j){
+            if (Fits[i] < Fits[j]){
+                temp = Fits[i];
+                Fits[i] = Fits[j];
+                Fits[j] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i < CrossoverLimit; ++i){
+        printf("%f\n", Fits[i]);
+    }
+}
+
+void InsertFitness(double BestFits[CrossoverLimit] , double NewFits[CrossoverLimit],struct GeneArray *OrigGenes, struct GeneArray *CrossedGenes){
+    for(int i =0;i<CrossoverLimit;i++){
+        for(int k =0;k<CrossoverLimit;k++){
+            if(NewFits[i]>BestFits[k]){
+                //Replace Fits and Genes
+                BestFits[k] = NewFits[i];
+                OrigGenes[k] = CrossedGenes[i];
+                break;
+            }
+        }
     }
 }

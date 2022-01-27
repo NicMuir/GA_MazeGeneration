@@ -21,5 +21,9 @@ void Path(int **Maze,int *visited_idx);
 void BackTrack_Path(int visited[size][size],struct Node Start,struct Node Goal);
 double Fitness(int **Maze);
 
+void sortFitnessArray(double Fitneses[CrossoverLimit]);
+void InsertFitness(double BestFits[CrossoverLimit] , double NewFits[CrossoverLimit], struct GeneArray *OrigGenes, struct GeneArray *CrosseGenes);
+
+
 
 #endif
