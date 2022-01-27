@@ -77,9 +77,14 @@ void single_crossover(struct Gene * gene1,struct Gene * gene2 ,int partition_siz
         rnd1 = rand() % Number_Of_Mazes;
         rnd2 = rand() % Number_Of_Mazes;
 
+        // for(int j=0;j<walls;j++){
+        //     Duplicate1[j] = *Genes[rnd1].Array[j];
+        //     Duplicate2[j] = *Genes[rnd2].Array[j];
+        // }
+
         for(int j=0;j<walls;j++){
-            Duplicate1[j] = *Genes[rnd1].Array[j];
-            Duplicate2[j] = *Genes[rnd2].Array[j];
+            Duplicate1[j] = Genes->Array[rnd1][j];
+            Duplicate2[j] = Genes->Array[rnd2][j];
         }
     
         for(int k =0;k<Crossover_Indecies;k++){

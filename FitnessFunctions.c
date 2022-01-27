@@ -65,7 +65,7 @@ void Path(int **Maze,int *visited_idx){
         struct Node Current = Pop(FullStack);
 
         if(Current.x == goal.x && Current.y == goal.y){
-            printf("Finishable\n");
+            printf(" ");
             free(FullStack);
             Global_Path_Finnishable = 1;
             return ;
@@ -78,8 +78,6 @@ void Path(int **Maze,int *visited_idx){
                struct Node temp = {Current.x-1,Current.y};
                Push(FullStack,temp);
             }
-            
-            
         }
 
         if (Current.x < size-1 && Current.y > -1 && Current.x > -1 && Maze[Current.x+1][Current.y] == 0 ){ 
@@ -107,21 +105,14 @@ void Path(int **Maze,int *visited_idx){
             {
                visited[Current.x][Current.y-1] = 2;
                struct Node temp = {Current.x,Current.y-1};
-               Push(FullStack,temp);
-               
+               Push(FullStack,temp); 
             }
-            
-            
         }
-
-        
-
     }
-    printf("\n");
-    printf("NOT Finishable\n");
+    
     Global_Created_Check++;
     *visited_idx = vis_idx;
-    
+    printf(" ");
     free(FullStack);
     return;
 }
@@ -132,8 +123,7 @@ double Fitness(int **Maze){
     int visited_idx = 0 ;
     Global_Path_Finnishable = 0;
     Path(Maze,&visited_idx);
-    Print_Maze(Maze);
-    
+
     if(Global_Path_Finnishable == 0){
         return((double)(visited_idx)/(double)(size*size));
     }else{
@@ -143,27 +133,42 @@ double Fitness(int **Maze){
 
 
 
-void sortFitnessArray(double Fits[]){
-     double temp;
+void sortFitnessArray(double Fits[],struct GeneArray *Gene){
+    double temp;
+    
     for (int i = 0; i < CrossoverLimit; ++i){
         for (int j = i + 1; j < CrossoverLimit; ++j){
             if (Fits[i] < Fits[j]){
                 temp = Fits[i];
                 Fits[i] = Fits[j];
                 Fits[j] = temp;
+
+            
+                for(int z=0;z<walls;z++){
+                    int tempint = Gene->Array[i][z].x;
+                    int tempint2 = Gene->Array[i][z].y;
+                    
+                    Gene->Array[i][z].x =  Gene->Array[j][z].x;
+                    Gene->Array[i][z].y =  Gene->Array[j][z].y;
+
+                    Gene->Array[j][z].x = tempint;
+                    Gene->Array[j][z].y = tempint2;
+                }
+
             }
         }
     }
 }
 
-void InsertFitness(double BestFits[CrossoverLimit] , double NewFits[CrossoverLimit],struct GeneArray *OrigGenes, struct GeneArray *CrossedGenes){
+void InsertFitness(double BestFits[CrossoverLimit] , double NewFit[CrossoverLimit] ,struct GeneArray *OrigGenes,  struct GeneArray *cGenes){
+    //Future work : Update to shift genes down and not just replace the gene.
+
     for(int i =0;i<CrossoverLimit;i++){
-        for(int k =0;k<CrossoverLimit;k++){
-            if(NewFits[i]>BestFits[k]){
-                //Replace Fits and Genes
-                BestFits[k] = NewFits[i];
-                OrigGenes[k] = CrossedGenes[i];
-                break;
+        for(int j = 0;j<CrossoverLimit;j++){
+            if(NewFit[j]>=BestFits[i]){
+            BestFits[i] = NewFit[j];
+            OrigGenes->Array[i] = cGenes->Array[j];
+            break;
             }
         }
     }

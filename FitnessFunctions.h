@@ -20,9 +20,8 @@ struct Node Pop(struct Stack *FullStack);
 void Path(int **Maze,int *visited_idx);
 void BackTrack_Path(int visited[size][size],struct Node Start,struct Node Goal);
 double Fitness(int **Maze);
-
-void sortFitnessArray(double Fitneses[CrossoverLimit]);
-void InsertFitness(double BestFits[CrossoverLimit] , double NewFits[CrossoverLimit], struct GeneArray *OrigGenes, struct GeneArray *CrosseGenes);
+void sortFitnessArray(double Fitneses[CrossoverLimit],struct GeneArray *Gene);
+void InsertFitness(double BestFits[CrossoverLimit] , double NewFit[CrossoverLimit], struct GeneArray *OrigGenes, struct GeneArray *cGenes);
 
 
 
